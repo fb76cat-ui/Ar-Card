@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>AR Test</title>
+    <!-- A-Frame と AR.js のCDN読み込み -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body style="margin: 0px; overflow: hidden;">
+    <a-scene embedded arjs vr-mode-ui="enabled: false">
+      <a-assets>
+        <img id="my-image" src="./test.png">
+      </a-assets>
+
+      <!-- 標準テスト用プリセットマーカー（hiro）を使用 -->
+      <a-marker preset="hiro">
+        <!-- マーカーの上に画像を垂直に立てて表示 -->
+        <a-image 
+          src="#my-image" 
+          position="0 0.5 0" 
+          rotation="0 0 0" 
+          width="1" 
+          height="1">
+        </a-image>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
