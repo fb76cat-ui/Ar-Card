@@ -3,30 +3,70 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>AR Test</title>
-    <!-- A-Frame と AR.js のCDN読み込み -->
+    <title>AR Business Card</title>
+    <!-- A-Frame と AR.js -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+      // タップで指定URLを開くスクリプト
+      AFRAME.registerComponent('link-handler', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            const targetUrl = this.getAttribute('data-url');
+            if (targetUrl) {
+              window.open(targetUrl, '_blank');
+            }
+          });
+        }
+      });
+    </script>
   </head>
   <body style="margin: 0px; overflow: hidden;">
+    <!-- ARシーン定義 -->
     <a-scene embedded arjs vr-mode-ui="enabled: false">
       <a-assets>
-        <img id="my-image" src="./test.png">
+        <!-- アップロードした病院画像 -->
+        <img id="hospital-img" src="./hospital.jpeg">
       </a-assets>
 
-      <!-- 標準テスト用プリセットマーカー（hiro）を使用 -->
+      <!-- テスト用HIROマーカー -->
       <a-marker preset="hiro">
-        <!-- マーカーの上に画像を垂直に立てて表示 -->
+        
+        <!-- 1. お礼メッセージ（建物の少し上に浮かせる） -->
+        <a-text 
+          value="Thank you for exchanging cards!\nTap building for details." 
+          align="center" 
+          position="0 1.3 0" 
+          rotation="0 0 0" 
+          scale="0.6 0.6 0.6" 
+          color="#ffffff"
+          geometry="primitive: plane; width: 3; height: 0.8" 
+          material="color: #222222; opacity: 0.7">
+        </a-text>
+
+        <!-- 2. 病院画像（垂直に立てて、タップでHPへ遷移） -->
+        <!-- 横幅16:9比率（width=2, height=1.12）で設定 -->
         <a-image 
-          src="#my-image" 
+          id="building-btn"
+          src="#hospital-img" 
           position="0 0.5 0" 
           rotation="0 0 0" 
-          width="1" 
-          height="1">
+          width="2" 
+          height="1.12"
+          data-url="https://www.miyasou-hp.jp/"
+          link-handler
+          class="clickable">
         </a-image>
+
       </a-marker>
 
-      <a-entity camera></a-entity>
+      <!-- スマホの画面タップを検知するカメラ設定 -->
+      <a-entity camera>
+        <a-entity 
+          cursor="rayOrigin: mouse" 
+          raycaster="objects: .clickable">
+        </a-entity>
+      </a-entity>
     </a-scene>
   </body>
 </html>
